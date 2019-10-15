@@ -915,11 +915,11 @@ class _HomeVipState extends State<HomeVip> with AutomaticKeepAliveClientMixin,Ti
       print("------------");
       //130
       if (scrollController.offset >= 120) {
-        Store.value<HomeTabModel>(context).setIsScroll(1);
+        Store.value<HomeTabModel>(context,1).setIsScroll(1);
       } else if(scrollController.offset <= 10){
 //        Store.value<HomeTabModel>(context)
         //更换AppBar 背景色 字体色, 以及暂停动画效果
-        Store.value<HomeTabModel>(context).setIsScroll(0);
+        Store.value<HomeTabModel>(context,1).setIsScroll(0);
       }
     });
     super.initState();

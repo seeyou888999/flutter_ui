@@ -28,7 +28,6 @@ class _MinePageState extends State<MinePage> with
 
   TabController _tabController;
   PageController mPageController = PageController(initialPage: 0);
-
   var currentPage = 0;
   var isPageCanChanged = true;
   List<TabTitle> tabList;
@@ -67,8 +66,9 @@ class _MinePageState extends State<MinePage> with
     ];
   }
 
+
   onPageChange(int index, {PageController p, TabController t}) async {
-    //Store.value<HomeTabModel>(context).setIsScroll(0);
+    Store.value<HomeTabModel>(context,1).setIsScroll(0);
     if (p != null) {//判断是哪一个切换
       isPageCanChanged = false;
       await mPageController.animateToPage(index, duration: Duration
@@ -88,11 +88,11 @@ class _MinePageState extends State<MinePage> with
     _tabController.addListener(() {
       if (_tabController.index.toDouble() == _tabController.animation.value) {
         if (this.mounted) {
-          Store.value<HomeTabModel>(context).setCurrIndex(_tabController.index);
+          Store.value<HomeTabModel>(context,1).setCurrIndex(_tabController.index);
           if(this._tabController.index == 0){
-            Store.value<HomeTabModel>(context).stopPaly(true);
+            Store.value<HomeTabModel>(context,1).stopPaly(true);
           } else {
-            Store.value<HomeTabModel>(context).stopPaly(false);
+            Store.value<HomeTabModel>(context,1).stopPaly(false);
           }
           onPageChange(_tabController.index, p: mPageController);
         }
@@ -134,6 +134,7 @@ class _MinePageState extends State<MinePage> with
                 var colorsMap = Maps["search_colors"];
                 var searchWith = Maps['search_type'];
                 var isScoll = plan.isScroll;
+//                print(isScoll);
                 var pl = colorsMap==null?Colors.white:colorsMap.toList()
                     .length>1?CommonUtils.ADColor
                   ('${Maps["search_colors"][plan.index]}'):CommonUtils.ADColor
@@ -178,8 +179,8 @@ class _MinePageState extends State<MinePage> with
                                     alignment:Alignment.topLeft,
                                     width:
                                     searchWith==2?
-                                    sizewith/1.7:searchWith==1?
-                                    sizewith/1.85:sizewith/1.2,
+                                    sizewith/1.4:searchWith==1?
+                                    sizewith/1.5:sizewith/1.2,
                                     margin:EdgeInsets.only(top:8,left: 10),
                                     child: FlutterMarquee(
                                       singleStart: plan.boolPay,

@@ -26,7 +26,7 @@ class _HomeVipGridViewState extends State<HomeVipGridView> with AutomaticKeepAli
           mainAxisSpacing: 20.0,
           //横轴间距
           crossAxisSpacing: 2.0,
-          childAspectRatio: 1/1.2, //如果不设置等比高度 当GridView里面得元素过多情况下,
+          childAspectRatio: 1/1.3, //如果不设置等比高度 当GridView里面得元素过多情况下,
           // 会导致高度不够, 比值越小宽度约高
         ),
         itemBuilder: (BuildContext context,int index){

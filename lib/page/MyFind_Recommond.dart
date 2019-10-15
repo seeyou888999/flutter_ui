@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ui/model/FindModel.dart';
+import 'package:flutter_ui/page/VideoPage.dart';
 import 'package:flutter_ui/widgets/widget_utils.dart';
 class MyFindRecommond extends StatefulWidget {
   @override
@@ -96,10 +97,15 @@ class _MyFindRecommondState extends State<MyFindRecommond> with AutomaticKeepAli
               child: Column(
                 children: <Widget>[
                   ListTile(
-                    leading: ClipOval(
-                      child: InkWell(
-                        child: Image.network(list[index].userIcon,fit: BoxFit
-                            .cover,),
+                    leading: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(list[index].userIcon)
+                        )
                       ),
                     ),
                     title: Text(list[index].userName,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w300),),
@@ -145,15 +151,19 @@ class _MyFindRecommondState extends State<MyFindRecommond> with AutomaticKeepAli
                       (fontSize: 14,fontWeight: FontWeight.w300),maxLines: 5, overflow: TextOverflow.ellipsis),
                   ),
                   Container(
-                    height: 150,
-                    child: Text('123'),
+                    height: 300,
+                    decoration: BoxDecoration(
+                      color: CommonUtils.ADColor('#F1F2F2'),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: VideoPage(),
                   ),
                   list[index].findQuanzi!=null?
                   Container(
                     padding: EdgeInsets.all(10),
                     child: Row(
                       children: <Widget>[
-                        Text('来子圈子： ',style: TextStyle
+                        Text('来自圈子： ',style: TextStyle
                           (color: CommonUtils.ADColor('#ADADAD')),),
                         Text('${list[index].findQuanzi}',style: TextStyle
                           (color: Colors.lightBlue),),

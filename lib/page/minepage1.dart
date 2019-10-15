@@ -210,11 +210,11 @@ class _MinePageState extends State<MinePage> with
       if (_tabController.index.toDouble() == _tabController.animation.value) {
         if (this.mounted) {
           if(this._tabController.index == 0){
-            Store.value<HomeTabModel>(context).setIndex(0);
-            Store.value<HomeTabModel>(context).stopPaly(true);
+            Store.value<HomeTabModel>(context,0).setIndex(0);
+            Store.value<HomeTabModel>(context,0).stopPaly(true);
           } else {
-            Store.value<HomeTabModel>(context).setIndex(5);
-            Store.value<HomeTabModel>(context).stopPaly(false);
+            Store.value<HomeTabModel>(context,0).setIndex(5);
+            Store.value<HomeTabModel>(context,0).stopPaly(false);
           }
         }
       }

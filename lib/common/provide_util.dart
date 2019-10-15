@@ -1,5 +1,6 @@
 //Store 定义全局Context Stroe
 import 'package:flutter/material.dart' show BuildContext;
+import 'package:flutter_ui/model/AudioPlayModel.dart';
 import 'package:flutter_ui/model/HomeTabBarModel.dart';
 import 'package:flutter_ui/model/HomeVipCourse.dart';
 import 'package:flutter_ui/model/HomeVipModel.dart';
@@ -25,13 +26,17 @@ class Store {
         ChangeNotifierProvider(builder: (_)=>HomeVipModel(),),
         ChangeNotifierProvider(builder: (_)=>HomeTabModel(),),
         ChangeNotifierProvider(builder: (_)=>HomeVipCourseModel(),),
+        ChangeNotifierProvider(builder: (_)=>AudioPlayModelNotifier(),)
       ],
       child: child,
     );
   }
   //  通过Provider.value<T>(context)获取状态数据
-  static T value<T>(context){
+  static T value<T>(context,int status){
+    if (status==0)
     return Provider.of(context);
+    else
+    return Provider.of(context,listen: false);
   }
   // 通过Consumer(builder,child)获取状态数据 只更新调用该方法的widget
   static Consumer connect<T>({builder, child}) {

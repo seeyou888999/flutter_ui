@@ -89,7 +89,7 @@ class _UserCenterState extends State<UserCenter>
                   }
                   return _buildUserList(MyCenter["center"][index+1]);
                 },
-                childCount: MyCenter["center"].length-1))
+                childCount: MyCenter["center"].length-1)),
       ],
     );
   }
@@ -139,7 +139,7 @@ class _UserCenterState extends State<UserCenter>
                    return  _buildUserListItem(mapUser['center_list'][index]);
               })
             ),
-          )
+          ),
         ],
       ),
     );

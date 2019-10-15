@@ -6,6 +6,7 @@ import 'package:flutter_ui/widgets/widget_utils.dart';
 class HomeVipTabBarView extends StatefulWidget {
   final aguments;
   TabController tabController;
+
   ValueSetter<int> onclick;
   HomeVipTabBarView({this.aguments,this.onclick,this.tabController});
 

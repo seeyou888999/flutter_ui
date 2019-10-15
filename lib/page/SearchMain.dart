@@ -114,7 +114,7 @@ class _SearchMainState extends State<SearchMain> with AutomaticKeepAliveClientMi
                       })
                     );
                     Future.delayed(Duration(seconds: 1), (){ //延迟一秒1执行
-                      Store.value<PlanModel>(context).addList(aguments);
+                      Store.value<PlanModel>(context,0).addList(aguments);
                     });
                 },
               )

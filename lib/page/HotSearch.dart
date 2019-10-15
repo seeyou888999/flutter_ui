@@ -82,7 +82,7 @@ class _HotSearchState extends State<HotSearch> with AutomaticKeepAliveClientMixi
               })
               );
               Future.delayed(Duration(seconds: 1), (){ //延迟一秒1执行
-                Store.value<PlanModel>(context).addList(hotList[index]);
+                Store.value<PlanModel>(context,0).addList(hotList[index]);
               });
             },
           );
