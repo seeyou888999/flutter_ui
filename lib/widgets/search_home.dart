@@ -123,7 +123,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin,
                     child: Text('取消',style: TextStyle(fontSize: 12,color: Colors.black),),
                   ),
                   onTap: (){
-                    Store.value<HomeTabModel>(context).stopPaly(true);
+                    Store.value<HomeTabModel>(context,1).stopPaly(true);
                     Navigator.of(context).pop();
                   },
                 )
@@ -151,7 +151,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin,
   //使用indexStack进行保持Tabr 状态活性 并加载Tabview
   Widget  getBody(){
     return Store.connect<PlanModel>(builder: (context,plan,child){
-      List<String> listView = Store.value<PlanModel>(context).lists;
+      List<String> listView = Store.value<PlanModel>(context,0).lists;
       if(listView.length > 0){
         return  NestedScrollView(
             controller: _scrollViewController,
@@ -229,7 +229,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin,
                           CommonUtils.ADColor('#BCBCBC'),),
                         ),
                         onTap: (){
-                          Store.value<PlanModel>(context).clearList();//重置数据
+                          Store.value<PlanModel>(context,0).clearList();//重置数据
                         },
                       )
                   ),

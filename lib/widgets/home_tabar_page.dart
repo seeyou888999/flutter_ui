@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_marquee/animation_direction.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_ui/common/AudioPlayerManager.dart';
 import 'package:flutter_ui/common/FlutterMarquee.dart';
 import 'package:flutter_ui/common/global.dart';
 import 'package:flutter_ui/common/provide_util.dart';
+import 'package:flutter_ui/model/AudioPlayModel.dart';
 import 'package:flutter_ui/model/HomeTabBarModel.dart';
+import 'package:flutter_ui/page/LisinterPage.dart';
+import 'package:flutter_ui/page/OtherSearch.dart';
 import 'package:flutter_ui/widgets/widget_utils.dart';
 class HomeTabrPage extends StatefulWidget {
   @override
@@ -28,6 +32,9 @@ class _HomeTabrPageState extends State<HomeTabrPage> with
   ];
   List  _newTitle = ['鬼吹灯之天罚','山海密藏','盗墓笔记之猴赛雷xxxxxxxxxx','老九门','仙逆之我欲封天','天启'
       '者'];
+  PageController audioController = PageController(initialPage: 0);
+
+
   @override
   void initState() {
     super.initState();
@@ -299,18 +306,28 @@ class _HomeTabrPageState extends State<HomeTabrPage> with
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(left: 5,top: 10),
-                  child: Icon(Icons.supervisor_account,size: 16),
+                Expanded(
+                  child: Row(
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(left: 10,top: 10),
+                          child: Icon(Icons.supervisor_account,size: 16),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 5,top: 10),
+                          child: Text('猜你喜欢',style: TextStyle(fontSize: 12),),
+                        ),
+                      ],
+                  )
+
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 5,top: 10),
-                  child: Text('猜你喜欢',style: TextStyle(fontSize: 12),),
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.bottomRight,
+                    margin: EdgeInsets.only(right: 10),
+                    child: Icon(Icons.autorenew,size: 16,color: Colors.black87,),
+                  )
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 240,top: 10),
-                  child: Icon(Icons.autorenew,size: 16,),
-                )
               ],
             ),
           ),
@@ -365,35 +382,50 @@ class _HomeTabrPageState extends State<HomeTabrPage> with
   Widget _getGridList(){
     return Container(
       child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children:_getPushList()
       ),
       color: Colors.white,
     );
   }
   Widget _getItemContainer(int index){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-            width: 90,
-            height: 90,
-            decoration: new BoxDecoration(
-              borderRadius: BorderRadius.circular(2),
-              color: Colors.white,
-              image: new DecorationImage(
-                image: new NetworkImage(_netWorkImage[index]),
-                fit: BoxFit.cover,
-              ),
-            )
-        ),
+    return  GestureDetector(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+              width: 90,
+              height: 90,
+              decoration: new BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
+                color: Colors.white,
+                image: new DecorationImage(
+                  image: new NetworkImage(_netWorkImage[index]),
+                  fit: BoxFit.cover,
+                ),
+              )
+          ),
 
-        Container(
-          alignment: Alignment.center,
-          child: Text(_newTitle[index],style: TextStyle(fontSize: 11),
-            overflow:TextOverflow.ellipsis,),
-        )
-      ],
+          Container(
+            alignment: Alignment.center,
+            child: Text(_newTitle[index],style: TextStyle(fontSize: 11),
+              overflow:TextOverflow.ellipsis,),
+          )
+        ],
+      ),
+    onTap: (){
+        Store.value<HomeTabModel>(context,1).stopPaly(false);
+        AudioPlayerManager.isStop = true;
+        Store.value<AudioPlayModelNotifier>(context, 1).setIsPlayState(false);
+        if(!AudioPlayerManager.isPlay) AudioPlayerManager.isPlay = true;
+          Navigator.push(context,
+            MaterialPageRoute(builder:(context){
+//              AudioPlayerManager.audioPlayer.dispose();
+              return LisinterPage(aguments: {"playerIndex":index,"isPlay:":true});
+              //跳转搜索页面
+            })
+         );
+      }
     );
   }
 

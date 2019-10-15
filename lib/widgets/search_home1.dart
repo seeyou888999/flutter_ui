@@ -90,7 +90,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin,
                     child: Text('取消',style: TextStyle(fontSize: 12,color: Colors.black),),
                   ),
                   onTap: (){
-                    Store.value<HomeTabModel>(context).stopPaly(true);
+                    Store.value<HomeTabModel>(context,1).stopPaly(true);
                     Navigator.of(context).pop();
                   },
                 )
