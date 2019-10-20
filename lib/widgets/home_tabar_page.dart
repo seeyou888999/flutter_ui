@@ -8,6 +8,7 @@ import 'package:flutter_ui/common/provide_util.dart';
 import 'package:flutter_ui/model/AudioPlayModel.dart';
 import 'package:flutter_ui/model/HomeTabBarModel.dart';
 import 'package:flutter_ui/page/LisinterPage.dart';
+import 'package:flutter_ui/page/LisinterPlayer.dart';
 import 'package:flutter_ui/page/OtherSearch.dart';
 import 'package:flutter_ui/widgets/widget_utils.dart';
 class HomeTabrPage extends StatefulWidget {
@@ -418,13 +419,23 @@ class _HomeTabrPageState extends State<HomeTabrPage> with
         AudioPlayerManager.isStop = true;
         Store.value<AudioPlayModelNotifier>(context, 1).setIsPlayState(false);
         if(!AudioPlayerManager.isPlay) AudioPlayerManager.isPlay = true;
-          Navigator.push(context,
-            MaterialPageRoute(builder:(context){
-//              AudioPlayerManager.audioPlayer.dispose();
-              return LisinterPage(aguments: {"playerIndex":index,"isPlay:":true});
-              //跳转搜索页面
-            })
-         );
+            Navigator.of(context).push(new MaterialPageRoute(builder: (cxt)=>
+            new LisinterPlayer()));
+//          Navigator.push(context,
+//            MaterialPageRoute(builder:(context){
+////              AudioPlayerManager.audioPlayer.dispose();
+//              return LisinterPage(aguments: {"playerIndex":index,"isPlay:":true});
+//              //跳转搜索页面
+//            })
+//         );
+
+//          Navigator.push(context,
+//            MaterialPageRoute(builder:(context){
+////              AudioPlayerManager.audioPlayer.dispose();
+//              return LisinterPage(aguments: {"playerIndex":index,"isPlay:":true});
+//              //跳转搜索页面
+//            })
+//         );
       }
     );
   }

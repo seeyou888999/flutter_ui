@@ -40,6 +40,10 @@ dependencies:
   flutter_circular_slider: ^2.5.0
   flutter_bubble: ^0.0.1
   flutter_tableview: ^1.0.1
+  flutter_rating_bar: ^3.0.0
+  flutter_easyrefresh: ^2.0.4
+  extended_nested_scroll_view: ^0.3.6
+  sticky_headers: ^0.1.8
 dev_dependencies:
   flutter_test:
     sdk: flutter

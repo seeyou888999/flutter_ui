@@ -226,7 +226,36 @@ var MyCenter =
       },
     ]
   };
+var TYPES = [
+  {'title': '0-20集', 'value': 0},
+  {'title': '20-40集', 'value': 1},
+  {'title': '40-80集', 'value': 2},
+  {'title': '80-100集', 'value': 3},
+  {'title': '100-120集', 'value': 4},
+  {'title': '120-140集', 'value': 5},
+  {'title': '140-160集', 'value': 6},
+  {'title': '160-180集', 'value': 7},
+  {'title': '180-200集', 'value': 8},
+  {'title': '200-220集', 'value': 9},
+  {'title': '220-240集', 'value': 10},
+  {'title': '240-260集', 'value': 11},
+  {'title': '260-280集', 'value': 12},
+  {'title': '280-300集', 'value': 13},
+  {'title': '300-320集', 'value': 14},
+  {'title': '320-340集', 'value': 15},
+  {'title': '340-360集', 'value': 16},
+  {'title': '360-380集', 'value': 17},
+  {'title': '380-400集', 'value': 18},
+  {'title': '400-420集', 'value': 19},
+  {'title': '420-440集', 'value': 20},
+  {'title': '440-460集', 'value': 21},
+  {'title': '460-480集', 'value': 22},
+  {'title': '480-500集', 'value': 23},
+  {'title': '500-520集', 'value': 24},
+  {'title': '520-540集', 'value': 25},
 
+];
+var subSize = 0;
 var  netWorkImage = [
   'http://imagev2.xmcdn.com/group63/M06/6B/0D/wKgMaF0u0gXiM7eMAAO'
       '-DPWVpEY919.jpg',

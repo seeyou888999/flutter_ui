@@ -4,6 +4,7 @@ import 'package:flutter_ui/model/AudioPlayModel.dart';
 import 'package:flutter_ui/model/HomeTabBarModel.dart';
 import 'package:flutter_ui/model/HomeVipCourse.dart';
 import 'package:flutter_ui/model/HomeVipModel.dart';
+import 'package:flutter_ui/model/LisinterBottomModel.dart';
 import 'package:flutter_ui/model/planmodel.dart';
 import 'package:flutter_ui/model/swiperstatus.dart';
 import 'package:provider/provider.dart'
@@ -26,7 +27,8 @@ class Store {
         ChangeNotifierProvider(builder: (_)=>HomeVipModel(),),
         ChangeNotifierProvider(builder: (_)=>HomeTabModel(),),
         ChangeNotifierProvider(builder: (_)=>HomeVipCourseModel(),),
-        ChangeNotifierProvider(builder: (_)=>AudioPlayModelNotifier(),)
+        ChangeNotifierProvider(builder: (_)=>AudioPlayModelNotifier(),),
+        ChangeNotifierProvider(builder: (_)=>BottomModel())
       ],
       child: child,
     );

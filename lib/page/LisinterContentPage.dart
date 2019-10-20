@@ -1,19 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bubble/bubble_widget.dart';
-import 'package:flutter_ui/common/RIKeys.dart';
+import 'package:flutter_ui/common/ToastShow.dart';
 import 'package:flutter_ui/common/global.dart';
-import 'package:flutter_ui/otherpage/flutter_sheet_tabview.dart';
+import 'package:flutter_ui/otherpage/bottom_drag_widget.dart';
+import 'package:flutter_ui/page/LisinterBottomDrag.dart';
 import 'package:flutter_ui/res/colors.dart';
 import 'package:flutter_ui/res/dimens.dart';
 import 'package:flutter_ui/widgets/widget_utils.dart';
+import 'package:sticky_headers/sticky_headers.dart';
 
 class LinsterContent extends StatefulWidget {
   @override
   _LinsterContentState createState() => _LinsterContentState();
 }
 
-class _LinsterContentState extends State<LinsterContent> {
+class _LinsterContentState extends State<LinsterContent>
+    with TickerProviderStateMixin {
   List list = [
     '都市',
     '8090',
@@ -26,9 +29,32 @@ class _LinsterContentState extends State<LinsterContent> {
     '穿越',
     '金庸古龙'
   ];
+
   // Each section header height;
   GlobalKey anchorKey = GlobalKey();
   GlobalKey anchorKey1 = GlobalKey();
+  double get screenH => MediaQuery.of(context).size.height;
+  //平移动画控制器
+  AnimationController offsetAnimationController;
+  //提供一个曲线，使动画感觉更流畅
+  CurvedAnimation ffsetCurvedAnimation;
+  //平移动画
+  Animation<double> offsetAnim;
+  double screeH = 0;
+  double withOp = 0.5;
+  List<String>  listwidget = new List();
+  double _mPage = 0;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    offsetAnimationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -514,53 +540,30 @@ class _LinsterContentState extends State<LinsterContent> {
           ),
           Container(
               child: InkWell(
-              child: new Text(
-                '查看更多评论 >',
-                style: TextStyle(color: MyColors.textBlack9),
-              ),
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height-30,
-                      child: Stack(
-                        children: <Widget>[
-                          _buildSheetContext(),
-                          _buildSheetTabBar(),
-                          Positioned(
-                              bottom: 0,
-                              right: 0,
-                              left: 0,
-                              child: Container(
-                                constraints: BoxConstraints.expand(height: Dimens.titleHeight),
-                                color: Colors.white,
-                                child: Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: Container(
-                                        child: buildTextField(),
-                                        margin: EdgeInsets.only(left: 10,right: 10),
-                                        height:  Dimens.titleHeight-15,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                isScrollControlled: true,
-                shape: new BeveledRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(3),
-                        topRight: Radius.circular(3)),
-                    side: new BorderSide(
-                      style: BorderStyle.none,
-                    )),
+            child: new Text(
+              '查看更多评论 >',
+              style: TextStyle(color: MyColors.textBlack9),
+            ),
+            onTap: () {
+              screeH = MediaQuery.of(context).size.height - 30;
+              offsetAnimationController = new AnimationController(
+                vsync: this,
+                duration: Duration(milliseconds: 350),
               );
+              ffsetCurvedAnimation = new CurvedAnimation(
+                  parent: offsetAnimationController,
+                  curve: Curves.fastOutSlowIn);
+              offsetAnim = new Tween(begin: screeH, end: 0.0)
+                  .animate(ffsetCurvedAnimation);
+              ToastShow.makeText(
+                  animalController: offsetAnimationController,
+                  curve: ffsetCurvedAnimation,
+                  offsetAnim: offsetAnim,
+                  context: context,
+                  animated: ToastShow.ANIMATED_MOVEMENT_TWEEN,
+                  duration: 1000,
+                  top: MediaQuery.of(context).size.height - 30,
+                  child:  LisinterBottomDrag(offsetAnimationController: offsetAnimationController,)).show();
             },
           ))
         ],
@@ -569,23 +572,23 @@ class _LinsterContentState extends State<LinsterContent> {
   }
 
   Widget buildTextField() {
-    return  TextFormField(
+    return TextFormField(
         style: TextStyle(fontSize: 13),
         keyboardType: TextInputType.text,
         textAlign: TextAlign.left,
-        onChanged: (value){
-
-        },
+        onChanged: (value) {},
         decoration: InputDecoration(
-          hintText:'我猜测,此刻你可能有话想说',
-          hintStyle: TextStyle(fontSize: 14,color: CommonUtils.ADColor('#999999')),
+          hintText: '哔哩哔哩,此刻你可能有话想说',
+          hintStyle:
+              TextStyle(fontSize: 14, color: CommonUtils.ADColor('#999999')),
           contentPadding: EdgeInsets.only(top: 12),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(70)),
           ),
           filled: true,
           fillColor: CommonUtils.ADColor('#EFF1F4'),
-          enabledBorder: UnderlineInputBorder(  //设置boder边框色
+          enabledBorder: UnderlineInputBorder(
+            //设置boder边框色
             borderSide: BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(25.7),
           ),
@@ -593,85 +596,26 @@ class _LinsterContentState extends State<LinsterContent> {
             borderSide: BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(25.7),
           ),
-          prefixIcon:  Container(
+          prefixIcon: Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(Icons.create,color: CommonUtils.ADColor
-                  ("#CCCCCC"),size: 20,),
+                Icon(
+                  Icons.create,
+                  color: CommonUtils.ADColor("#CCCCCC"),
+                  size: 20,
+                ),
                 Container(
                   decoration: BoxDecoration(
                       color: Colors.black12,
-                      borderRadius: BorderRadius.circular(10)
-                  ),
+                      borderRadius: BorderRadius.circular(10)),
                   width: 20,
                   height: 3,
                 )
               ],
             ),
           ),
-        )
-    );
-  }
-
-  Widget _buildSheetTabBar(){
-    return Container(
-        height: Dimens.titleHeight,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                  alignment: Alignment.center,
-                  child: new Text('全部 300 条评论',style:TextStyle(fontSize: 16,fontWeight: FontWeight.w500),)
-              ),
-            ),
-            InkWell(
-              child: Container(
-                child: Icon(Icons.close,color: Colors
-                    .black,size: 25,),
-              ),
-              onTap: (){
-                Navigator.of(context).pop();
-              },
-            ),
-            SizedBox(width: 10,)
-          ],
-        ),
-      );
-  }
-
-  Widget _buildSheetContext(){
-    return Container(
-      margin: EdgeInsets.only(top: Dimens.titleHeight),
-      //FlutterTableView
-      child: FlutterSheetTabView(
-        shrinkWrap: true,
-        sectionCount: 2,
-        rowCountAtSection: _rowCountAtSection,
-        sectionHeaderBuilder: _sectionHeaderBuilder,
-        cellBuilder: _cellBuilder,
-        sectionHeaderHeight: _sectionHeaderHeight,
-        cellHeight: _cellHeight,
-      ),
-    );
-  }
-
-  double _sectionHeaderHeight(BuildContext context, int section) {
-    return 40.0;
-  }
-
-  // Each cell item widget height.
-  double _cellHeight(BuildContext context, int section, int row) {
-    return 200.0;
-  }
-
-  int _rowCountAtSection(int section) {
-    if (section == 0) {
-      return 3;
-    } else {
-      return 10;
-    }
+        ));
   }
 
   Widget _buildHotReviewList(int type) {
@@ -686,13 +630,13 @@ class _LinsterContentState extends State<LinsterContent> {
                 borderRadius: BorderRadius.circular(50),
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: NetworkImage(
-                      type==0?'https://imagev2.xmcdn.com/group47/M00/2B/E1/wKgKm1uEthTz13hxAAROx6fnPZ8302.jpg':
-                      'http://imagev2.xmcdn.com/group50/M00/48/C5/wKgKmVvvmKCRMK-JAAF-6QUkwdE602.jpg'),
+                  image: NetworkImage(type == 0
+                      ? 'https://imagev2.xmcdn.com/group47/M00/2B/E1/wKgKm1uEthTz13hxAAROx6fnPZ8302.jpg'
+                      : 'http://imagev2.xmcdn.com/group50/M00/48/C5/wKgKmVvvmKCRMK-JAAF-6QUkwdE602.jpg'),
                 )),
           ),
           title: Text(
-            type==0?'偷得半生闲':"锎总今日说",
+            type == 0 ? '偷得半生闲' : "锎总今日说",
             style: TextStyle(fontSize: 14, color: Colors.black),
           ),
           subtitle: Column(
@@ -715,7 +659,7 @@ class _LinsterContentState extends State<LinsterContent> {
               //回复内容
               Container(
                 child: new Text(
-                  type==0?'这声音怎么找不到当初听鬼吹灯的感觉':"锎总说要赚一个亿！！！",
+                  type == 0 ? '这声音怎么找不到当初听鬼吹灯的感觉' : "锎总说要赚一个亿！！！",
                   style: TextStyle(fontSize: 14, color: Colors.black),
                   textAlign: TextAlign.left,
                 ),
@@ -791,57 +735,16 @@ class _LinsterContentState extends State<LinsterContent> {
                         child: InkWell(
                             child: new Text('查看全部200条回复 >'),
                             onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Container();
-                                },
-//                            isScrollControlled: true,
-                                shape: new BeveledRectangleBorder
-                                    //修改底部圆角
-                                    (
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(3),
-                                        topRight: Radius.circular(3)),
-                                    side: new BorderSide(
-                                      style: BorderStyle.none,
-                                    )),
-                              );
                             })),
                     SizedBox(
                       height: 10,
                     ),
                   ],
                 ),
-              )
+              ),
+
             ],
           )),
-    );
-  }
-
-  // Section header widget builder.
-  Widget _sectionHeaderBuilder(BuildContext context, int section) {
-    return InkWell(
-      onTap: () {
-//        print('click section header. -> section:$section');
-      },
-      child: Container(
-        alignment: Alignment.centerLeft,
-        padding: EdgeInsets.only(left: 16.0),
-        color: Color.fromRGBO(220, 220, 220, 1),
-        height: 40,
-        child: Text(section==0?'热评':'全部评论'),
-      ),
-    );
-  }
-
-  // cell item widget builder.
-  Widget _cellBuilder(BuildContext context, int section, int row) {
-    return InkWell(
-      onTap: () {
-        print('click cell item. -> section:$section row:$row');
-      },
-      child: section ==0 ?_buildHotReviewList(0):_buildHotReviewList(1),
     );
   }
 

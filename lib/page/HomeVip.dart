@@ -192,25 +192,39 @@ class _HomeVipState extends State<HomeVip> with AutomaticKeepAliveClientMixin,Ti
             Container(
                 height: 300,
 //                width: MediaQuery.of(context).size.width-50,
-                child: Swiper(
-                    itemCount: 3,
+                child: Swiper.children(
+                    autoplay: false,
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: ((c,i){
-                      return Container(
-                        child: Column(
-                          children: <Widget>[
-                            _buildSellBookColumn(i),
-                            _buildSellBookColumn(i),
-                          ],
-                        ),
-                      );
-                    }),
+                    children: _buildSellBookList()
                   )
             )
           ],
         )
     );
   }
+
+  List<Widget> _buildSellBookList(){
+    subSize = 2;
+    double subPageTotal = (newTitle.length / subSize)
+        + ((newTitle.length % subSize > 0) ?1 : 0);
+    List<Widget> list = new List();
+    for (var i = 0, len = subPageTotal - 1; i <= len; i++) {
+      // 分页计算
+      int fromIndex = i * subSize;
+      int toIndex = ((i == len) ? newTitle.length : ((i + 1) * subSize));
+      list.add(
+        Column(
+          children: <Widget>[
+            _buildSellBookColumn(fromIndex),
+            SizedBox(height: 10,),
+            _buildSellBookColumn(toIndex-1)
+          ],
+        )
+      );
+    }
+    return list;
+  }
+
   Widget _buildSellBookColumn(int index){
    return  Container(
      margin: EdgeInsets.only(left: 20),

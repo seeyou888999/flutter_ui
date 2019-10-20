@@ -130,15 +130,13 @@ class _LisinterPageState extends State<LisinterPage> with TickerProviderStateMix
   }
 
   void tabListener(ScrollController _controller){
-    print(_controller.offset);
-    if (_controller.offset <= 170) {
+    if (_controller.offset <= 100) {
       setState(() {
         double num = (1 - _controller.offset / 170) * 255;
         _iconColor = Color.fromARGB(255, num.toInt(), num.toInt(), num.toInt());
         _titleBgColor = Color.fromARGB(255 - num.toInt(), 255, 255, 255);
       });
     } else if(_controller.offset >= 310){
-        print("-------");
         setState(() {
           _barBgColor = Color.fromARGB(255, 255, 255, 255);
           _selectBgColor = Color.fromRGBO(255, 0xEE6911,0xEE6911,0xEE6911);
@@ -196,7 +194,6 @@ class _LisinterPageState extends State<LisinterPage> with TickerProviderStateMix
                 .w300,color: _barTextBgColor),),
           ],
           onTap: (index){
-            print(index);
             setState(() {
               _tabIndex = index;
             });

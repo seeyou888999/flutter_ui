@@ -1,158 +1,117 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_ui/FlutterScroll.dart';
-import 'package:flutter_ui/common/provide_util.dart' show Store;
-import 'package:flutter_ui/page/FindPage.dart';
-import 'package:flutter_ui/page/meheardpage.dart';
-import 'package:flutter_ui/page/minepage.dart';
-import 'package:flutter_ui/page/UserCenter.dart';
-void main()  {
-  runApp(MainPage());
-  if (Platform.isAndroid) {
-    // 以下两行 设置android状态栏为透明的沉浸。写在组件渲染之后，是为了在渲染后进行set赋值，覆盖状态栏，写在渲染之前MaterialApp组件会覆盖掉这个值。
-    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle
-      (statusBarColor:Colors.red);
-    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-  }
+import 'package:flutter_ui/common/ToastShow.dart';
+import 'package:flutter_ui/common/show.dart';
+// void main() => runApp(MyApp());
+void main(){
+  runApp(MaterialApp(
+    home: MyHome(),
+  ));
 }
 
-class MainPage extends StatelessWidget {
+class MyHome extends StatefulWidget {
+  @override
+  _MyHomeState createState() => _MyHomeState();
+}
+
+class _MyHomeState extends State<MyHome> {
+  int i = 0;
+  String str = '我是 Toast';
   @override
   Widget build(BuildContext context) {
-    return Store.init(
-      context: context,
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: '回马枪',
-          theme: new ThemeData(
-            brightness: Brightness.light,
-          ),
-        home: Builder(builder: (context){
-          Store.context = context;
-           return MainHome();
-        })
-      )
-    );
-  }
-}
-
-class MainHome extends StatefulWidget {
-  @override
-  _MainHomeState createState() => _MainHomeState();
-}
-
-
-
-class _MainHomeState extends State<MainHome> with
-    SingleTickerProviderStateMixin<MainHome>,AutomaticKeepAliveClientMixin{
-  var _currIndex = 0;
-  var _body; //定义body
-  var _tabIcons = [
-    Icon(Icons.home),
-    Icon(Icons.find_in_page),
-    Icon(Icons.calendar_today),
-    Icon(Icons.shopping_cart),
-    Icon(Icons.account_box)
-  ];
-
-  void initData(){
-      _body = new IndexedStack(
-          children: <Widget>[
-              //放置安全区域
-            SafeArea(top:true,child: MinePage()), //首页推荐模块  配置顶部导航和swiper
-            SafeArea(top:true,child: MeHeardPage()), //加载我听模块
-            SafeArea(top:true,child: NewsScreen()), //加载我听咨询模块
-            SafeArea(top:true,child: FindPage()), //加载发现模块
-            SafeArea(top:true,child: UserCenter()), //加载个人中心模块
-          ],
-        index: _currIndex,
-      );
-  }
-  List _bottomBarTitles = ['首页','我听','我听快讯','发现','账号'];
-
-  Widget getText(int index){
-    return Text(_bottomBarTitles[index],style: TextStyle(fontSize: 12),);
-  }
-  @override
-  Widget build(BuildContext context) {
-    initData();
-    //初始化加载
     return Scaffold(
-        key: ObjectKey("MinePage"),
-        body: _body,
-        bottomNavigationBar: _bootmNavigationBar()
-      );
-  }
+      appBar: AppBar(title: Text('Overlay'),),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.add_circle_outline),
+                  onPressed: (){
+                    str += '啊啊啊啊';
+                  },
+                ),
+                RaisedButton(
+                    child: Text('渐变效果'),
+                    onPressed:(){
+                      ToastShow.makeText(context:context, content:'渐变显示与隐藏 '
+                          '${++i} $str').show();
+                    }
+                ),
 
-  Widget _bootmNavigationBar() {
-   return  CupertinoTabBar(
-      inactiveColor: Colors.black,
-      backgroundColor: Colors.white,
-      items: <BottomNavigationBarItem>[
-        BottomNavigationBarItem(icon: _tabIcons[0],title:getText
-          (0)),
-        BottomNavigationBarItem(icon: _tabIcons[1],title:getText
-          (1)),
-        BottomNavigationBarItem(icon: _tabIcons[2],title:getText
-          (2)),
-        BottomNavigationBarItem(icon: _tabIcons[3],title:getText
-          (3)),
-        BottomNavigationBarItem(icon: _tabIcons[4],title:getText
-          (4)),
-      ],
-      currentIndex: _currIndex,
-      onTap: (index){
-        setState(() {
-          _currIndex = index;
-        });
-      },
+                RaisedButton(
+                    child: Text('上下效果'),
+                    onPressed:(){
+                      ToastShow.makeText(
+                          context:context,
+                          top: 300,
+                          content:'底部弹出隐藏到底部 ${++i} $str',
+                          animated: ToastShow.ANIMATED_MOVEMENT_BTBSHOW)
+                          .show();
+                    }
+                ),
+
+                RaisedButton(
+                    child: Text('左右效果'),
+                    onPressed:(){
+                      ToastShow.makeText(context:context, content:'左边滑出隐藏到右边 ${++i} $str',animated: ToastShow.ANIMATED_MOVEMENT_LCR).show();
+                    }
+                ),
+
+                RaisedButton(
+                    child: Text('自定义效果'),
+                    onPressed:(){
+                      ToastShow.makeText(context:context, child: _customToastLayout(context),animated: ToastShow.ANIMATED_MOVEMENT_LCR).show();
+                    }
+                ),
+
+                IconButton(
+                  icon: Icon(Icons.remove_circle_outline),
+                  onPressed: (){
+                    if(str.length > 14){
+                      str = str.substring(0,str.length - 4);
+                    }else{
+                      str = '我是 Flutter';
+                    }
+                  },
+                ),
+
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                RaisedButton(
+                    child: Text('Tween'),
+                    onPressed:(){
+                      ToastShow.makeText(context:context, content:'Tween动画带曲线 ${++i} $str',animated: ToastShow.ANIMATED_MOVEMENT_TWEEN).show();
+                    }
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+
     );
   }
 
-
-  @override
-  void dispose() {
-    super.dispose();
+  //toast绘制 自定义
+  static _customToastLayout(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width / 5 * 4,
+      child: Card(
+        color: Colors.black54,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+          child: ListTile(
+            leading:Image.network('https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=eea934627f8da9775a228e79d138937c/b3b7d0a20cf431ad6fd6b4684736acaf2edd985f.jpg'),
+            title: Text('Flutter',style: TextStyle( fontSize: 20.0, color: Colors.white, )),
+            subtitle: Text('Flutter是谷歌的移动UI框架，可以快速在iOS和Android上构建高质量的原生用户界面。',style: TextStyle( fontSize: 12.0, color: Colors.white, )),
+          ),
+        ),
+      ),
+    );
   }
 
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-  Widget getShowBottomSheet(){
-//       Scaffold.of(context).showBottomSheet(
-//         //弹出底部层
-//               (BuildContext context){
-//                return  GestureDetector(
-//                    child: Container(
-//                      child: Text("我是底部弹出来的"),
-//                      height: double.infinity,
-//                      width: double.infinity,
-//                    ),
-//                    onPanUpdate: (DragUpdateDetails e) {
-//                      //用户手指滑动时，更新偏移，重新构建
-//                      setState(() {
-////                                                      _left += e.delta.dx;
-////                                                      _top += e.delta.dy;
-//                      });
-//                    }
-//                );
-//           },
-//           shape: new BeveledRectangleBorder
-//           //修改底部圆角
-//             (borderRadius: BorderRadius.circular
-//             (2.0),side: new BorderSide(
-//             style: BorderStyle.none,)
-//           ),
-//       );
-  }
 }
-
-
-

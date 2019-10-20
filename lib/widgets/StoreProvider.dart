@@ -14,13 +14,6 @@ class _StoreProviderState extends State<StoreProvider> {
   var containerView;
   @override
   Widget build(BuildContext context) {
-//    Store.connect<widget.object>(
-//        builder: (context, snapshot, child) {
-//          print('first page name Widget rebuild');
-//          return Text(
-//              '${Store.value<UserModel>(context).name}'
-//          );
-//        }
-//    )
+
   }
 }

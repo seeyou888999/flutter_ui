@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_ui/common/AudioPlayerManager.dart';
 import 'package:flutter_ui/common/MyPainter.dart';
 import 'package:flutter_ui/common/NoSplashFactory.dart';
+import 'package:flutter_ui/common/global.dart';
 import 'package:flutter_ui/common/provide_util.dart' show Store;
 import 'package:flutter_ui/page/FindPage.dart';
 import 'package:flutter_ui/page/LisinterPage.dart';
@@ -110,7 +111,22 @@ class _MainHomeState extends State<MainHome> with
     return Text(_bottomBarTitles[index],style: TextStyle(fontSize: 12),);
   }
 
-
+//  void test(int index){
+//    subSize = 2;
+//    double subPageTotal = (newTitle.length / subSize)
+//        + ((newTitle.length % subSize > 0) ?1 : 0);
+//    List<Widget> list = new List();
+//    int fromIndex = index-1 * subSize;
+//    int toIndex = ((index == subPageTotal-1) ? newTitle.length : ((index +1)
+//        * subSize));
+//    for (var i = 0, len = subPageTotal - 1; i <= len; i++) {
+//      // 分页计算
+//      int fromIndex = i * subSize;
+//      int toIndex = ((i == len) ? newTitle.length : ((i + 1) * subSize));
+//
+//      print('$fromIndex==${toIndex-1}');
+//    }
+//  }
   @override
   Widget build(BuildContext context) {
     //初始化加载
@@ -153,10 +169,7 @@ class _MainHomeState extends State<MainHome> with
                 }),
               ),
             onTap: (){
-              print("${AudioPlayerManager.isPlay}----${AudioPlayerManager
-                  .isPlayer}--${AudioPlayerManager.isLoadPlayer}");
               if(!AudioPlayerManager.isPlay) AudioPlayerManager.isPlay = true;
-
               AudioPlayerManager.getPlayerIndex().then((v){
                 Navigator.push(context,
                     MaterialPageRoute(builder:(context){

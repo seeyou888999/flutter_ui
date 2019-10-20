@@ -34,6 +34,6 @@ class MyColors{
   static final Color paginationColor = Color(0xFFD8D8D8);
 
   static final Color coverBgColor = Color(0xFF484563);
-
+  static final Color coverTopColor = Color(0xFF484563);
 
 }
