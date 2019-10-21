@@ -15,10 +15,8 @@ class LisinterPlayItem extends StatefulWidget {
   final ScrollController scrollController;
   final GlobalKey glKey;
   final editParentText;
-
   LisinterPlayItem(
       {this.tabId, this.scrollController, this.glKey, this.editParentText});
-
   @override
   _LisinterPlayItemState createState() => _LisinterPlayItemState();
 }
@@ -41,9 +39,10 @@ class _LisinterPlayItemState extends State<LisinterPlayItem> {
     super.dispose();
   }
 
-
-
   Widget buildItem(double offset){
+
+
+
     return HJPopupMenu(
       top: offset,
       initialValue: TYPE_INDEX,
@@ -110,8 +109,6 @@ class _LisinterPlayItemState extends State<LisinterPlayItem> {
               noMoreText: '没有更多',
               infoText: '更新于 %T'),
           taskIndependence: true,
-          firstRefresh: true,
-          bottomBouncing: true,
           builder: (context, physics, header, footer) {
             return CustomScrollView(
               physics: physics,

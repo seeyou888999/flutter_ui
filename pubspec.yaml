@@ -44,6 +44,7 @@ dependencies:
   flutter_easyrefresh: ^2.0.4
   extended_nested_scroll_view: ^0.3.6
   sticky_headers: ^0.1.8
+  stopper: ^1.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

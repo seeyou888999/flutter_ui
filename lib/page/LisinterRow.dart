@@ -23,8 +23,6 @@ class _LisinterRowState extends State<LisinterRow> {
       padding: this.widget.padding,
       margin: this.widget.margin,
       child: Row(
-//        crossAxisAlignment:this.widget.crossAxisAlignment==null?this.widget
-//          .crossAxisAlignment:this.widget.crossAxisAlignment,
         mainAxisAlignment: this.widget.mainAxisAlignment==null?MainAxisAlignment.start:
           this.widget.mainAxisAlignment,
         children: buildRow(),

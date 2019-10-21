@@ -197,6 +197,14 @@ class _LisinterPageState extends State<LisinterPage> with TickerProviderStateMix
             setState(() {
               _tabIndex = index;
             });
+            index==0?
+            _controller.animateTo(170, duration: Duration(milliseconds: 500)
+                , curve: Curves.fastOutSlowIn):
+            index==1?_controller.animateTo(980, duration: Duration
+              (milliseconds: 500)
+                , curve: Curves.fastOutSlowIn):_controller.animateTo(1350,
+                duration: Duration(milliseconds: 500)
+                , curve: Curves.fastOutSlowIn);
           },
           currIndex: _tabIndex,
         ),

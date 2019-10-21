@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_ui/common/PopupMenuItem.dart';
-import 'package:flutter_ui/common/StickSlivers.dart';
 import 'package:flutter_ui/common/ToastShow.dart';
-import 'package:flutter_ui/common/global.dart';
+import 'package:flutter_ui/page/LisinterPlayeValidity.dart';
 import 'package:flutter_ui/page/LisinterPlayerItem.dart';
 import 'package:flutter_ui/res/colors.dart';
 import 'package:flutter_ui/res/dimens.dart';
@@ -22,7 +20,7 @@ class _LisinterPlayerState extends State<LisinterPlayer> with SingleTickerProvid
   Color _textBgColor = Color.fromARGB(0, 255, 255, 255);
   Color _titleBgColor = Color.fromARGB(255, 90, 106, 108);
   double paddingTop = 0.0;
-  int _tabIndex = 0;
+  int _tabIndex = 1;
   final int DEFAULT_SCROLLER = 200;
   int editText= 0;
   GlobalKey  globalKey;
@@ -122,9 +120,9 @@ class _LisinterPlayerState extends State<LisinterPlayer> with SingleTickerProvid
             body: IndexedStack(
               index: _tabIndex,
               children: <Widget>[
+                LisinterPlayerValidity(),
                 LisinterPlayItem(tabId: "Tab$_tabIndex",scrollController:
                 scrollController,glKey: globalKey),
-                Container(),
                 Container(),
               ],
             ),

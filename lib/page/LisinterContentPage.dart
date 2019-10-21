@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bubble/bubble_widget.dart';
 import 'package:flutter_ui/common/ToastShow.dart';
 import 'package:flutter_ui/common/global.dart';
-import 'package:flutter_ui/otherpage/bottom_drag_widget.dart';
 import 'package:flutter_ui/page/LisinterBottomDrag.dart';
 import 'package:flutter_ui/res/colors.dart';
 import 'package:flutter_ui/res/dimens.dart';
 import 'package:flutter_ui/widgets/widget_utils.dart';
-import 'package:sticky_headers/sticky_headers.dart';
 
 class LinsterContent extends StatefulWidget {
   @override
@@ -43,15 +41,17 @@ class _LinsterContentState extends State<LinsterContent>
   double screeH = 0;
   double withOp = 0.5;
   List<String>  listwidget = new List();
+  double hideHeight = 0;
   double _mPage = 0;
   @override
   void initState() {
+    hideHeight = 150;
     super.initState();
   }
 
   @override
   void dispose() {
-    offsetAnimationController.dispose();
+    offsetAnimationController?.dispose();
     super.dispose();
   }
 
@@ -61,6 +61,7 @@ class _LinsterContentState extends State<LinsterContent>
       child: Column(
         children: <Widget>[
           _buildTitle(),
+          _buildPlayerContent(),
           Container(
             height: 14,
             color: MyColors.dividerColor,
@@ -89,11 +90,81 @@ class _LinsterContentState extends State<LinsterContent>
       ),
     );
   }
+  //创建内容详情视图
+  Widget _buildPlayerContent(){
+    return Container(
+      child: SizedOverflowBox(
+        alignment: Alignment.topLeft,
+        size: Size(MediaQuery.of(context).size.height,hideHeight),
+        child: Stack(
+          alignment: AlignmentDirectional.bottomStart,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(10),
+              child: new RichText(
+                text: TextSpan(
+                  text: '老衲要还俗',
+                  style: TextStyle(fontSize: 16,color: Colors.black),
+                  children: [
+                    TextSpan(
+                      text: '老衲要还俗啦!!!!!!!!!!老衲要还俗啦!!!!!!!!!!'
+                          '老衲要还俗啦!!!!!!!!!!老衲要还俗啦!!!!!!!!!!老衲要还俗啦!!!!!!!!!!'
+                          '老衲要还俗啦!!!!!!!!!!老衲要还俗啦!!!!!!!!!!老衲要还俗啦!!!!!!!!!!'
+                          '老衲要还俗啦!!!!!!!!!!老衲要还俗啦!!!!!!!!!!老衲要还俗啦!!!!!!!!!!'
+                          '老衲要还俗啦!!!!!!!!!!老衲要还俗啦!!!!!!!!!!老衲要还俗啦!!!!!!!!!!'
+                          '老衲要还俗啦!!!!!!!!!!老衲要还俗啦!!!!!!!!!!老衲要还俗啦!!!!!!!!!!'
+                          '老衲要还俗啦!!!!!!!!!!老衲要还俗啦!!!!!!!!!!老衲要还俗啦!!!!!!!!!!',
+                      style: TextStyle(fontSize: 16,color: Colors.black),
+                    ),
+                  ]
+                ),
+              ),
+              width: MediaQuery.of(context).size.width, height: hideHeight,
+            ),
+            hideHeight<=200?Positioned(
+              child: Container(
+                color: Color.fromARGB(255,254, 255, 254).withOpacity(0.5),
+                height: Dimens.titleHeight+20,
+            )):Container(),
+            hideHeight<=200?Positioned(
+              child: InkWell(
+                child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Text('剩余61%,加入会员可查看全文',style: TextStyle(color:
+                        Colors.red),),
+                        SizedBox(width: 10,),
+                        Icon(Icons.arrow_drop_down_circle,color: Colors.red,
+                          size: 20,)
+                      ],
+                    ),
+                    height: Dimens.titleHeight-10,color: Colors.white
+                ),
+                onTap: (){
+                  setState(() {
+                    hideHeight = 300;
+                  });
+                },
+              ),
+            ):Container()
+          ],
+        )
+      ),
+    );
+  }
 
   //创建内容标题
   Widget _buildTitle() {
     return Container(
-      height: 80,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 1,color: Colors.grey.withOpacity(0.5),
+          )
+        )
+      ),
+      height: 70,
       child: ListTile(
         leading: Container(
           //本地圆角图片
