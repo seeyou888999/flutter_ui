@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_ui/common/ToastShow.dart';
+import 'package:flutter_ui/otherpage/floatingActionButton.dart';
 import 'package:flutter_ui/page/LisinterPlayeValidity.dart';
 import 'package:flutter_ui/page/LisinterPlayerItem.dart';
 import 'package:flutter_ui/res/colors.dart';
@@ -31,7 +32,6 @@ class _LisinterPlayerState extends State<LisinterPlayer> with SingleTickerProvid
     tabController = new TabController(length: 3, vsync: this,initialIndex: 1);
     scrollController = new ScrollController()
     ..addListener((){
-//      print(scrollController.offset);
       if (scrollController.offset <= 100) {
         setState(() {
           double num = (1 - scrollController.offset / 100) * 255;
@@ -60,9 +60,7 @@ class _LisinterPlayerState extends State<LisinterPlayer> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
-    var pinnedHeaderHeight =
-    //statusBar height
-    statusBarHeight +23;
+    var pinnedHeaderHeight =statusBarHeight +23;
     Future<bool> _onWillPop()=>new Future.value(false);
     return WillPopScope(
         onWillPop:_onWillPop,
@@ -126,7 +124,13 @@ class _LisinterPlayerState extends State<LisinterPlayer> with SingleTickerProvid
                 Container(),
               ],
             ),
-      )),
+         ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: Hero(
+            tag: 'floatButton',
+            child: FloationActionButton(),
+          )
+      ),
     );
   }
 

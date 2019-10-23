@@ -3,6 +3,7 @@ import 'package:flutter_marquee/animation_direction.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_ui/common/AudioPlayerManager.dart';
 import 'package:flutter_ui/common/FlutterMarquee.dart';
+import 'package:flutter_ui/common/RouteAnimted.dart';
 import 'package:flutter_ui/common/global.dart';
 import 'package:flutter_ui/common/provide_util.dart';
 import 'package:flutter_ui/model/AudioPlayModel.dart';
@@ -419,29 +420,9 @@ class _HomeTabrPageState extends State<HomeTabrPage> with
         AudioPlayerManager.isStop = true;
         Store.value<AudioPlayModelNotifier>(context, 1).setIsPlayState(false);
         if(!AudioPlayerManager.isPlay) AudioPlayerManager.isPlay = true;
-            Navigator.of(context).push(new MaterialPageRoute(builder: (cxt)=>
-            new LisinterPlayer()));
-//          Navigator.push(context,
-//            MaterialPageRoute(builder:(context){
-////              AudioPlayerManager.audioPlayer.dispose();
-//              return LisinterPage(aguments: {"playerIndex":index,"isPlay:":true});
-//              //跳转搜索页面
-//            })
-//         );
-
-//          Navigator.push(context,
-//            MaterialPageRoute(builder:(context){
-////              AudioPlayerManager.audioPlayer.dispose();
-//              return LisinterPage(aguments: {"playerIndex":index,"isPlay:":true});
-//              //跳转搜索页面
-//            })
-//         );
+            RouteAnimted.PageRouteTo(context, LisinterPlayer());
       }
     );
-  }
-
-  List<Widget> _getItems(){ //采用Gridview.count 加载widget 调用该方法返回List<Widget>
-    return _netWorkImage.map((item)=>_getItemContainer(item)).toList();
   }
 
   List <Widget> _getPushList(){

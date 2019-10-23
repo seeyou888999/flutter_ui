@@ -661,20 +661,18 @@ class _LisinterPageState1 extends State<LisinterPage1> with
                   data: SliderTheme.of(context).copyWith(
                         activeTrackColor: Colors.white, //进度条滑块左边颜色
                         inactiveTrackColor: Colors.grey, //进度条滑块右边颜色
-                        trackShape: RoundSliderTrackShape(radius: 10),//进度条形状,这边自定义两头显示圆角
+                        trackShape: RoundSliderTrackShape(),//进度条形状,这边自定义两头显示圆角
                         thumbColor: Colors.white, //滑块颜色
                         thumbShape: RoundSliderThumbShape(//可继承SliderComponentShape自定义形状
                           disabledThumbRadius: 5, //禁用是滑块大小
                           enabledThumbRadius: 5, //滑块大小
                         ),
-                        inactiveTickMarkColor: Colors.black,
-                        showValueIndicator: ShowValueIndicator.onlyForDiscrete,//气泡显示的形式
-                        valueIndicatorShape: PaddleSliderValueIndicatorShape(),//气泡形状
-                        valueIndicatorTextStyle: TextStyle(color: Colors.black),//气泡里值的风格
                         trackHeight: 2 //进度条宽度
 
                     ),//进度条宽度
                   child: Slider(
+                    activeColor: Colors.white,
+                    inactiveColor: Colors.red,
                     value: _value,
                     onChanged: (newValue) {
                       setState(() {

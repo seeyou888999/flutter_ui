@@ -1,56 +1,49 @@
 import 'package:flutter/material.dart';
-
+import 'dart:math' as math;
 class RoundSliderTrackShape extends SliderTrackShape {
-
-  const RoundSliderTrackShape({this.disabledThumbGapWidth = 2.0, this.radius = 0});
-
-  final double disabledThumbGapWidth;
-  final double radius;
-
-  @override
-  Rect getPreferredRect({
-    RenderBox parentBox,
-    Offset offset = Offset.zero,
-    SliderThemeData sliderTheme,
-    bool isEnabled,
-    bool isDiscrete,
-  }) {
-    final double overlayWidth = sliderTheme.overlayShape.getPreferredSize(isEnabled, isDiscrete).width;
-    final double trackHeight = sliderTheme.trackHeight;
-    assert(overlayWidth >= 0);
-    assert(trackHeight >= 0);
-    assert(parentBox.size.width >= overlayWidth);
-    assert(parentBox.size.height >= trackHeight);
-
-    final double trackLeft = offset.dx + overlayWidth / 2;
-    final double trackTop = offset.dy + (parentBox.size.height - trackHeight) / 2;
-
-    final double trackWidth = parentBox.size.width - overlayWidth;
-    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
-  }
-
   @override
   void paint(
       PaintingContext context,
       Offset offset, {
-        RenderBox parentBox,
-        SliderThemeData sliderTheme,
-        Animation<double> enableAnimation,
-        TextDirection textDirection,
-        Offset thumbCenter,
-        bool isDiscrete,
-        bool isEnabled,
+        @required RenderBox parentBox,
+        @required SliderThemeData sliderTheme,
+        @required Animation<double> enableAnimation,
+        @required TextDirection textDirection,
+        @required Offset thumbCenter,
+        bool isDiscrete = false,
+        bool isEnabled = false,
       }) {
-    if (sliderTheme.trackHeight == 0) {
+    assert(context != null);
+    assert(offset != null);
+    assert(parentBox != null);
+    assert(sliderTheme != null);
+    assert(sliderTheme.disabledActiveTrackColor != null);
+    assert(sliderTheme.disabledInactiveTrackColor != null);
+    assert(sliderTheme.activeTrackColor != null);
+    assert(sliderTheme.inactiveTrackColor != null);
+    assert(sliderTheme.thumbShape != null);
+    assert(enableAnimation != null);
+    assert(textDirection != null);
+    assert(thumbCenter != null);
+    // If the slider track height is less than or equal to 0, then it makes no
+    // difference whether the track is painted or not, therefore the painting
+    // can be a no-op.
+    if (sliderTheme.trackHeight <= 0) {
       return;
     }
 
-    final ColorTween activeTrackColorTween =
-    ColorTween(begin: sliderTheme.disabledActiveTrackColor, end: sliderTheme.activeTrackColor);
-    final ColorTween inactiveTrackColorTween =
-    ColorTween(begin: sliderTheme.disabledInactiveTrackColor, end: sliderTheme.inactiveTrackColor);
-    final Paint activePaint = Paint()..color = activeTrackColorTween.evaluate(enableAnimation);
-    final Paint inactivePaint = Paint()..color = inactiveTrackColorTween.evaluate(enableAnimation);
+    // Assign the track segment paints, which are leading: active and
+    // trailing: inactive.
+    final ColorTween activeTrackColorTween = ColorTween(
+        begin: sliderTheme.disabledActiveTrackColor,
+        end: sliderTheme.activeTrackColor);
+    final ColorTween inactiveTrackColorTween = ColorTween(
+        begin: sliderTheme.disabledInactiveTrackColor,
+        end: sliderTheme.inactiveTrackColor);
+    final Paint activePaint = Paint()
+      ..color = activeTrackColorTween.evaluate(enableAnimation);
+    final Paint inactivePaint = Paint()
+      ..color = inactiveTrackColorTween.evaluate(enableAnimation);
     Paint leftTrackPaint;
     Paint rightTrackPaint;
     switch (textDirection) {
@@ -64,28 +57,58 @@ class RoundSliderTrackShape extends SliderTrackShape {
         break;
     }
 
-    double horizontalAdjustment = 0.0;
-    if (!isEnabled) {
-      final double disabledThumbRadius =
-          sliderTheme.thumbShape.getPreferredSize(false, isDiscrete).width / 2.0;
-      final double gap = disabledThumbGapWidth * (1.0 - enableAnimation.value);
-      horizontalAdjustment = disabledThumbRadius + gap;
-    }
+    final Rect trackRect = Rect.fromLTWH(
+        offset.dx,
+        offset.dy + parentBox.size.height / 2 - sliderTheme.trackHeight / 2,
+        parentBox.size.width - sliderTheme.trackHeight / 2,
+        sliderTheme.trackHeight);
 
-    final Rect trackRect = getPreferredRect(
-      parentBox: parentBox,
-      offset: offset,
-      sliderTheme: sliderTheme,
-      isEnabled: isEnabled,
-      isDiscrete: isDiscrete,
-    );
+    // The arc rects create a semi-circle with radius equal to track height.
+    final Rect leftTrackArcRect = Rect.fromLTWH(
+        trackRect.left, trackRect.top, trackRect.height, trackRect.height);
+    if (!leftTrackArcRect.isEmpty)
+      context.canvas.drawArc(
+          leftTrackArcRect, math.pi / 2, math.pi, false, leftTrackPaint);
+    final Rect rightTrackArcRect = Rect.fromLTWH(
+        trackRect.right - trackRect.height / 2,
+        trackRect.top,
+        trackRect.height,
+        trackRect.height);
+    if (!rightTrackArcRect.isEmpty)
+      context.canvas.drawArc(
+          rightTrackArcRect, -math.pi / 2, math.pi, false, rightTrackPaint);
+    final Size thumbSize =
+    sliderTheme.thumbShape.getPreferredSize(isEnabled, isDiscrete);
 
-    //进度条两头圆角
-    final RRect leftTrackSegment = RRect.fromLTRBR(trackRect.left, trackRect.top,
-        thumbCenter.dx - horizontalAdjustment, trackRect.bottom, Radius.circular(radius));
-    context.canvas.drawRRect(leftTrackSegment, leftTrackPaint);
-    final RRect rightTrackSegment = RRect.fromLTRBR(thumbCenter.dx + horizontalAdjustment, trackRect.top,
-        trackRect.right, trackRect.bottom, Radius.circular(radius));
-    context.canvas.drawRRect(rightTrackSegment, rightTrackPaint);
+    final RRect leftTrackSegment = RRect.fromLTRBAndCorners(trackRect.left +
+        trackRect.height / 2,
+        trackRect.top,
+        thumbCenter.dx - thumbSize.width / 2 + trackRect.height,
+        trackRect.bottom);
+    if (!leftTrackSegment.isEmpty)
+      context.canvas.drawRRect(leftTrackSegment, leftTrackPaint);
+    final RRect rightTrackSegment = RRect.fromLTRBAndCorners(
+        thumbCenter.dx + thumbSize.width / 2 - trackRect.height,
+        trackRect.top,
+        trackRect.right,
+        trackRect.bottom,);
+    if (!rightTrackSegment.isEmpty)
+      context.canvas.drawRRect(rightTrackSegment, rightTrackPaint);
+  }
+
+  @override
+  Rect getPreferredRect(
+      {RenderBox parentBox,
+        Offset offset = Offset.zero,
+        SliderThemeData sliderTheme,
+        bool isEnabled,
+        bool isDiscrete}) {
+    double thumbWidth =
+        sliderTheme.thumbShape.getPreferredSize(isEnabled, isDiscrete).width;
+    return Rect.fromLTWH(
+        offset.dx + (thumbWidth / 2),
+        offset.dy + parentBox.size.height / 2 - sliderTheme.trackHeight / 2,
+        parentBox.size.width - thumbWidth,
+        sliderTheme.trackHeight);
   }
 }

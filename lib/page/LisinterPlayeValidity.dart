@@ -137,24 +137,42 @@ class _LisinterPlayerValidityState extends State<LisinterPlayerValidity> {
               ],
             ),
           ),
-          Wrap(
-            verticalDirection: VerticalDirection.down,
-            runSpacing: 10,
-            spacing: 20,
-            children: string.asMap().keys.map((v){
-              return Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.blue,//CommonUtils.ADColor('#FFF4F1')
-                  borderRadius: BorderRadius.circular(2),
-                ),
-                child: Container(
-                  padding: EdgeInsets.only(right: 10),
-                  child: Text(string[v],style: TextStyle(fontSize: 14,color:
-                  CommonUtils.ADColor('000000')),textAlign: TextAlign.center,),
-                ),
-              );
-            }).toList(),
+          Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: Wrap(
+              verticalDirection: VerticalDirection.down,
+              runSpacing: 10,
+              spacing: 10,
+              children: string.asMap().keys.map((v){
+                return Container(
+                  decoration: BoxDecoration(
+                    color: CommonUtils.ADColor('#FFF4F1'),//CommonUtils.ADColor('#FFF4F1')
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                  child: Container(
+                    margin: EdgeInsets.only(left: 5,right: 5),
+                    padding: EdgeInsets.all(5),
+                    child: Text(string[v],style: TextStyle(fontSize: 14,color:
+                    CommonUtils.ADColor('#E5B8AD')),textAlign: TextAlign.center,),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          Container(
+            color: Colors.white,
+            margin: EdgeInsets.only(left: 10,right: 10),
+            child: new Text('探月大老爷的书必须听,就算不好听也得听，不听也得听就是这么牛掰。。。你咋地。。打我啊！！',),
+          ),
+          SizedBox(height: 10,),
+          Container(
+            child: new Divider(color: MyColors.textBlack9.withOpacity(0.5),height: 1,),
+          ),
+          Container(
+            height: 48,
+            alignment: Alignment.center,
+            color: Colors.grey.withOpacity(0.3),
+            child: new Text('查看更多评论'),
           )
         ],
       ),

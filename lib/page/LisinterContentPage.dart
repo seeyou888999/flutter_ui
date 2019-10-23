@@ -4,9 +4,11 @@ import 'package:flutter_bubble/bubble_widget.dart';
 import 'package:flutter_ui/common/ToastShow.dart';
 import 'package:flutter_ui/common/global.dart';
 import 'package:flutter_ui/page/LisinterBottomDrag.dart';
+import 'package:flutter_ui/page/LisinterBuildHotReview.dart';
 import 'package:flutter_ui/res/colors.dart';
 import 'package:flutter_ui/res/dimens.dart';
 import 'package:flutter_ui/widgets/widget_utils.dart';
+import 'package:stopper/stopper.dart';
 
 class LinsterContent extends StatefulWidget {
   @override
@@ -224,24 +226,29 @@ class _LinsterContentState extends State<LinsterContent>
             height: 10,
           ),
           Container(
-            height: 40,
+            height: 25,
             child: ListView.builder(
               itemCount: list.length,
               shrinkWrap: true,
-              itemExtent: 80,
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
-                  color: Colors.white,
                   alignment: Alignment.center,
-                  child: ActionChip(
-                    elevation: 2,
-                    label: new Text(
-                      "${list[index]} > ",
-                      style: TextStyle(fontSize: 12),
-                      textAlign: TextAlign.center,
-                    ),
-                    onPressed: () {},
+                  margin: EdgeInsets.only(left: 10),
+                  padding: EdgeInsets.only(left: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(20.0)
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new Text('${list[index]}',style: TextStyle(fontSize:
+                      12),),
+                      Icon(Icons.navigate_next,size: 20,color: Colors.grey,)
+                    ],
                   ),
                 );
               },
@@ -338,7 +345,7 @@ class _LinsterContentState extends State<LinsterContent>
               child: Text(
                 newMap['titile'],
                 style: TextStyle(fontSize: 10, color: Colors.white),
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.left,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -597,12 +604,14 @@ class _LinsterContentState extends State<LinsterContent>
             shrinkWrap: true,
             physics: new NeverScrollableScrollPhysics(),
             children: <Widget>[
-              _buildHotReviewList(1),
+              LisinterBuildHotReview(type: 1,onTap: ()=>showModalSheet(1),
+                showView: true,),
               Container(
                 child: Divider(
                     indent: 70, color: MyColors.meBgColor.withOpacity(0.5)),
               ),
-              _buildHotReviewList(0),
+              LisinterBuildHotReview(type: 0,onTap: ()=>showModalSheet(1),
+                showView: true,),
               Container(
                 child: Divider(
                     indent: 70, color: MyColors.meBgColor.withOpacity(0.5)),
@@ -615,31 +624,35 @@ class _LinsterContentState extends State<LinsterContent>
               '查看更多评论 >',
               style: TextStyle(color: MyColors.textBlack9),
             ),
-            onTap: () {
-              screeH = MediaQuery.of(context).size.height - 30;
-              offsetAnimationController = new AnimationController(
-                vsync: this,
-                duration: Duration(milliseconds: 350),
-              );
-              ffsetCurvedAnimation = new CurvedAnimation(
-                  parent: offsetAnimationController,
-                  curve: Curves.fastOutSlowIn);
-              offsetAnim = new Tween(begin: screeH, end: 0.0)
-                  .animate(ffsetCurvedAnimation);
-              ToastShow.makeText(
-                  animalController: offsetAnimationController,
-                  curve: ffsetCurvedAnimation,
-                  offsetAnim: offsetAnim,
-                  context: context,
-                  animated: ToastShow.ANIMATED_MOVEMENT_TWEEN,
-                  duration: 1000,
-                  top: MediaQuery.of(context).size.height - 30,
-                  child:  LisinterBottomDrag(offsetAnimationController: offsetAnimationController,)).show();
-            },
+            onTap: () =>showModalSheet(0),
           ))
         ],
       ),
     );
+  }
+
+
+  void showModalSheet(int initPageView){
+    screeH = MediaQuery.of(context).size.height - 30;
+    offsetAnimationController = new AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    );
+    ffsetCurvedAnimation = new CurvedAnimation(
+        parent: offsetAnimationController,
+        curve: Curves.fastOutSlowIn);
+    offsetAnim = new Tween(begin: screeH-30, end: 0.0)
+        .animate(ffsetCurvedAnimation);
+    ToastShow.makeText(
+        animalController: offsetAnimationController,
+        curve: ffsetCurvedAnimation,
+        offsetAnim: offsetAnim,
+        context: context,
+        animated: ToastShow.ANIMATED_MOVEMENT_TWEEN,
+        duration: 1000,
+        top: MediaQuery.of(context).size.height - 30,
+        child:  LisinterBottomDrag(offsetAnimationController:
+        offsetAnimationController,initPageView: initPageView,)).show();
   }
 
   Widget buildTextField() {

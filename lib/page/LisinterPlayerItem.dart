@@ -180,7 +180,9 @@ class _LisinterPlayItemState extends State<LisinterPlayItem> {
                         children: <Widget>[
                           SizedBox(width: 20,),
                           new Expanded(
-                            child: new Text("${index+1}章。哈啊哈",style: TextStyle
+                            child: new Text
+                              ("${index+1}章。天下舍我其谁??",
+                              style: TextStyle
                               (fontSize: 16,fontWeight: FontWeight.w300,color:
                             Colors.black.withOpacity(0.8)),),
                           ),
