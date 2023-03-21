@@ -31,7 +31,7 @@ dependencies:
   flutter_marquee:
     git: https://github.com/LiuC520/flutter_marquee.git
   provider: ^3.1.0
-  dio: ^2.0.10
+  dio: ">=2.0.10 <6.0.0"
   flutter_screenutil: ^0.5.1
   chewie: ^0.9.8
   fab_circular_menu: ^0.1.1
